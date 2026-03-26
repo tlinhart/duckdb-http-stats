@@ -22,9 +22,17 @@ jobs:
         with:
           key: ${{ github.job }}
           save: ${{ github.ref == 'refs/heads/main' }}
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11.1
+        with:
+          # Match the commit used by extension-ci-tools workflows.
+          vcpkgGitCommitId: 84bab45d415d22042bd0b9081aea57f362da3f35
       - name: Build extension binaries
         env:
           GEN: ninja
+          VCPKG_TOOLCHAIN_PATH: ${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake
+          VCPKG_TARGET_TRIPLET: x64-linux
+          USE_MERGED_VCPKG_MANIFEST: 1
         run: make release
       - name: Run tests
         run: make test

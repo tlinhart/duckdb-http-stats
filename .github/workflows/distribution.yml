@@ -16,6 +16,7 @@ jobs:
       duckdb_version: main
       ci_tools_version: main
       extension_name: http_stats
+      use_merged_vcpkg_manifest: "1"
   check-quality:
     name: Check code quality
     uses: duckdb/extension-ci-tools/.github/workflows/_extension_code_quality.yml@main
