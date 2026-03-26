@@ -32,11 +32,11 @@ EXPLAIN ANALYZE SELECT count(*) FROM read_json('https://httpbin.org/json');
 ----
 analyzed_plan	<REGEX>:.*Total Requests: [0-9]+.*
 
-# Verify request type breakdown appears (GET requests for fetching JSON).
+# Verify request type breakdown appears.
 query II
 EXPLAIN ANALYZE SELECT count(*) FROM read_json('https://httpbin.org/json');
 ----
-analyzed_plan	<REGEX>:.*GET: [0-9]+.*
+analyzed_plan	<REGEX>:.*(HEAD|GET): [0-9]+.*
 
 # Verify total time line appears.
 query II

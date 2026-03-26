@@ -33,6 +33,7 @@ jobs:
           VCPKG_TOOLCHAIN_PATH: ${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake
           VCPKG_TARGET_TRIPLET: x64-linux
           USE_MERGED_VCPKG_MANIFEST: 1
+          EXT_DEBUG_FLAGS: -DDUCKDB_LINKER=ld
         run: make release
       - name: Run tests
         run: make test
