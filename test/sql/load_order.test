@@ -1,0 +1,21 @@
+# name: test/sql/load_order.test
+# description: Test http_stats loaded before httpfs
+# group: [sql]
+
+require json
+
+require http_stats
+
+require httpfs
+
+# Our stats should appear even when http_stats was loaded before httpfs.
+query II
+EXPLAIN ANALYZE SELECT count(*) FROM read_json('https://httpbin.org/json');
+----
+analyzed_plan	<REGEX>:.*HTTP Stats.*
+
+# Standard HTTPFS stats should still be suppressed.
+query II
+EXPLAIN ANALYZE SELECT count(*) FROM read_json('https://httpbin.org/json');
+----
+analyzed_plan	<!REGEX>:.*HTTPFS HTTP Stats.*

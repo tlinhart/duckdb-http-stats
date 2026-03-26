@@ -1,0 +1,55 @@
+# name: test/sql/explain_output.test
+# description: Test EXPLAIN ANALYZE output
+# group: [sql]
+
+require json
+
+require httpfs
+
+require http_stats
+
+# Verify that standard HTTPFS stats are suppressed.
+query II
+EXPLAIN ANALYZE SELECT count(*) FROM read_json('https://httpbin.org/json');
+----
+analyzed_plan	<!REGEX>:.*HTTPFS HTTP Stats.*
+
+# Verify our HTTP stats box appears in the output.
+query II
+EXPLAIN ANALYZE SELECT count(*) FROM read_json('https://httpbin.org/json');
+----
+analyzed_plan	<REGEX>:.*HTTP Stats.*
+
+# Verify host name appears in the output.
+query II
+EXPLAIN ANALYZE SELECT count(*) FROM read_json('https://httpbin.org/json');
+----
+analyzed_plan	<REGEX>:.*httpbin\.org.*
+
+# Verify total requests line appears.
+query II
+EXPLAIN ANALYZE SELECT count(*) FROM read_json('https://httpbin.org/json');
+----
+analyzed_plan	<REGEX>:.*Total Requests: [0-9]+.*
+
+# Verify request type breakdown appears (GET requests for fetching JSON).
+query II
+EXPLAIN ANALYZE SELECT count(*) FROM read_json('https://httpbin.org/json');
+----
+analyzed_plan	<REGEX>:.*GET: [0-9]+.*
+
+# Verify total time line appears.
+query II
+EXPLAIN ANALYZE SELECT count(*) FROM read_json('https://httpbin.org/json');
+----
+analyzed_plan	<REGEX>:.*Total Time: [0-9]+\.[0-9]+s.*
+
+# Verify that two-host query shows both hosts (order is non-deterministic).
+query II
+EXPLAIN ANALYZE SELECT * FROM (
+    SELECT count(*) FROM read_json('https://httpbin.org/json')
+    UNION ALL
+    SELECT count(*) FROM read_json('https://jsonplaceholder.typicode.com/todos/1')
+);
+----
+analyzed_plan	<REGEX>:.*(httpbin\.org.*jsonplaceholder\.typicode\.com|jsonplaceholder\.typicode\.com.*httpbin\.org).*

@@ -1,0 +1,19 @@
+# name: test/sql/extension.test
+# description: Test extension loading
+# group: [sql]
+
+# Verify the extension isn't loaded by default.
+query I
+SELECT count(*) FROM duckdb_extensions()
+WHERE extension_name = 'http_stats' AND loaded = true;
+----
+0
+
+require http_stats
+
+# Verify the extension is loaded.
+query I
+SELECT count(*) FROM duckdb_extensions()
+WHERE extension_name = 'http_stats' AND loaded = true;
+----
+1
