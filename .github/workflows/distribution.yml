@@ -23,4 +23,5 @@ jobs:
       duckdb_version: main
       ci_tools_version: main
       extension_name: http_stats
-      format_checks: "format;tidy"
+      # Remove tidy check until duckdb/extension-ci-tools#223 is resolved.
+      format_checks: "format"
