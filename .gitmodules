@@ -1,0 +1,12 @@
+[submodule "duckdb"]
+	path = duckdb
+	url = https://github.com/duckdb/duckdb
+	branch = main
+[submodule "duckdb-httpfs"]
+	path = duckdb-httpfs
+	url = https://github.com/duckdb/duckdb-httpfs
+	branch = main
+[submodule "extension-ci-tools"]
+	path = extension-ci-tools
+	url = https://github.com/duckdb/extension-ci-tools
+	branch = main
