@@ -152,9 +152,9 @@ git submodule update --init --recursive
 
 ### Set up vcpkg
 
-The HTTP stats extension itself has no external dependencies, but it builds the
-HTTPFS extension alongside it for testing, which requires OpenSSL and curl
-managed through vcpkg. Set it up as follows:
+The HTTP stats extension itself has no external dependencies but it builds the
+HTTPFS extension alongside it for testing. The transitive dependencies of our
+build are managed via vcpkg. Set it up as follows:
 
 ```shell
 git clone https://github.com/microsoft/vcpkg.git
