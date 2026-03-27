@@ -129,6 +129,7 @@ LOAD http_stats;
 
 - C++11 compatible compiler
 - CMake 3.5 or higher
+- [vcpkg](https://vcpkg.io) (for dependency management)
 - [Ninja](https://ninja-build.org) (recommended for parallelizing the build
   process)
 - [ccache](https://ccache.dev) (recommended for caching compilation results and
@@ -148,6 +149,23 @@ submodules:
 ```shell
 git submodule update --init --recursive
 ```
+
+### Set up vcpkg
+
+The HTTP stats extension itself has no external dependencies, but it builds the
+HTTPFS extension alongside it for testing, which requires OpenSSL and curl
+managed through vcpkg. Set it up as follows:
+
+```shell
+git clone https://github.com/microsoft/vcpkg.git
+cd vcpkg
+git checkout 84bab45d415d22042bd0b9081aea57f362da3f35
+./bootstrap-vcpkg.sh -disableMetrics
+export VCPKG_TOOLCHAIN_PATH=$(pwd)/scripts/buildsystems/vcpkg.cmake
+```
+
+The build system will automatically use vcpkg when `VCPKG_TOOLCHAIN_PATH` is
+set. Dependencies are declared in `vcpkg.json`.
 
 ### Build with Make
 
